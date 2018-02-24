@@ -43,6 +43,7 @@ class Lifter:
         self.motor.overrideLimitSwitchesEnable(False)
         self.motor.configReverseLimitSwitchSource(ctre.WPI_TalonSRX.LimitSwitchSource.FeedbackConnector, ctre.WPI_TalonSRX.LimitSwitchNormal.NormallyOpen, deviceID=0, timeoutMs=10)
         self.motor.configForwardLimitSwitchSource(ctre.WPI_TalonSRX.LimitSwitchSource.Deactivated, ctre.WPI_TalonSRX.LimitSwitchNormal.Disabled, deviceID=0, timeoutMs=10)
+        self.motor.configSetParameter(ctre.WPI_TalonSRX.ParamEnum.eClearPositionOnLimitR, 1, 0, 0, timeoutMs=10)
 
         self.motor.overrideSoftLimitsEnable(True)
         self.motor.configForwardSoftLimitEnable(True, timeoutMs=10)
@@ -76,8 +77,6 @@ class Lifter:
             self.motor.setSelectedSensorPosition(self.metres_to_counts(self.SWITCH), 0, timeoutMs=10)
         if not self.top_switch.get():
             self.motor.setSelectedSensorPosition(self.metres_to_counts(self.BALANCED_SCALE), 0, timeoutMs=10)
-        if self.motor.isRevLimitSwitchClosed():
-            self.motor.setSelectedSensorPosition(self.metres_to_counts(self.BOTTOM_HEIGHT), 0, timeoutMs=10)
 
     def metres_to_counts(self, metres):
         return int(metres * self.COUNTS_PER_METRE)
